@@ -1,27 +1,16 @@
-// Daniel Shiffman
-// http://codingtra.in
-// http://patreon.com/codingtrain
-// Code for: https://youtu.be/6iZiqQZBQJY
-
 var fs = require('fs');
 var data = fs.readFileSync('words.json');
 var words = JSON.parse(data);
 console.log(words);
-
-//console.log('server is starting');
-
 var express = require('express');
-
 var app = express();
-
-var server = app.listen(3000, listening);
+var server = app.listen(4000, listening);
 
 function listening() {
-  console.log("listening. . . ");
+  console.log("server is listening. . . ");
 }
 
 app.use(express.static('website'));
-
 app.get('/add/:word/:score?', addWord);
 
 function addWord(request, response) {
@@ -38,7 +27,6 @@ function addWord(request, response) {
     words[word] = score;
     var data = JSON.stringify(words, null, 2);
     fs.writeFile('words.json', data, finished);
-
     function finished(err) {
       console.log('all set.');
       reply = {
@@ -48,16 +36,12 @@ function addWord(request, response) {
       }
       response.send(reply);
     }
-
-
   }
-
 }
 
 app.get('/all', sendAll);
-
 function sendAll(request, response) {
-  response.send(words);
+response.send(words);
 }
 
 app.get('/search/:word/', searchWord);

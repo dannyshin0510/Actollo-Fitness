@@ -1,7 +1,3 @@
-// Daniel Shiffman
-// http://codingtra.in
-// http://patreon.com/codingtrain
-// Code for: https://youtu.be/4zr8j-jeU_M
 
 function setup() {
   createCanvas(300, 200);
