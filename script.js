@@ -1,4 +1,3 @@
-
 var config = {
     apiKey: "AIzaSyB4buf1HovVJWmzvKIcDvMnh5dfrifDc-k",
     authDomain: "workout-1212e.firebaseapp.com",
@@ -7,55 +6,11 @@ var config = {
     storageBucket: "workout-1212e.appspot.com",
     messagingSenderId: "466304417497"
   };
+
   firebase.initializeApp(config);
   database = firebase.database();
-  //1. makes new elements
-  var ref = database.ref('Saturday');
-  var newWorkout ={
-    workout:["Jumping Jacks", "High knees", "Should press"],
-    goal:"To complete 30 high knees in 15 seconds"
-  }
-  // ref.push(newWorkout);
 
-
-
-
-
-  // 2. adds new elements to the firebase portal when button clicked
-$(document).ready(function(){
-  $("#goalButton").click(function(){
-        console.log("HELLO");
-        var ref = database.ref('Just added!');
-        var Monday ={
-        workout:["Jumping Jacks", "High knees", "Should press"],
-        goal:"To complete 30 high knees in 15 seconds"
-      }
-    ref.push(Monday);
-  }); 
-}); 
-
- //pulling ALL data from Firebase
-ref.on('value', gotData, err);
-function gotData(data) {
-console.log(data.val());
-var dataVal = data.val();
-var keys = Object.keys(dataVal);
-
-//testing conditional statements with the data read from the firebase datastorage.
-var exercise=data.val()[keys[0]]["workout"];
-for (var i=0; i<data.val()[keys[0]]["workout"].length;i++)
-{
-	document.getElementById("work").innerHTML+= "<li>"+data.val()[keys[0]]["workout"][i]+"</li>";
-}
-
-console.log(data.val()[keys[0]]["goal"]);
-$('#words').append(data.val()[keys[0]]["goal"]);
-  }
-  function err(err){
-    console.log("error!"+err);
-  }
-
-function completed()
+function completed() 
 {
  $("#goalStatus").append("Goal has been achieved");
 }
@@ -79,115 +34,66 @@ $.getJSON("https://api.openweathermap.org/data/2.5/weather?q=Toronto,ca&units=me
 		dayName[4] = "Thursday";
 		dayName[5] = "Friday";
 		dayName[6] = "Saturday";
-
 		//console.log(dayName[dateToday.getDay()]);
+		// shows today's status
 		displayToday();
-
+		//changing the reference to current day's regimen
+		var ref = database.ref(dayName[dateToday.getDay()]);
+		ref.on('value', gotData, err);
+		function err(err)
+		{
+			console.log("error!"+err);
+		}
+		//data pulled from the current day set above^
+		function gotData(data)
+		{
+			console.log(data.val());
+			var dataVal = data.val();
+			var keys = Object.keys(dataVal);
+			displayRegimen();
 		
-		$.getJSON("https://api.myjson.com/bins/1ceqmc", function(data)
-		{	
-				var numberTest=data;
-				console.log(data["mondayWork"][0]);
-
-			if (dayName[dateToday.getDay()]=="Monday")
-				monday();
-			else if (dayName[dateToday.getDay()]=="Tuesday")
-				tuesday();
-			else if (dayName[dateToday.getDay()]=="Wednesday")
-				wednesday();
-			else if (dayName[dateToday.getDay()]=="Thursday")
-				thursday();
-			else if (dayName[dateToday.getDay()]=="Friday")
-				friday();
-			else if (dayName[dateToday.getDay()]=="Saturday")
-				saturday();
-			else 
-				sunday();
-			function monday ()
-			{
-				
-				if (temperature<10)
-					for (var i=0; i<data["mondayWork"].length;i++)
+				function displayRegimen ()
+				{
+					if (temperature<10)
 					{
-						document.getElementById("work").innerHTML+= "<li>"+data["mondayWork"][i]+"</li>";
-					}
-					
-				else
-					document.getElementById("work").innerHTML="Let's go for a run!";
-			}
-			function tuesday ()
-			{
-				if (temperature<10)
-					for (var i=0; i<data["tuesdayWork"].length;i++)
-					{
-						document.getElementById("work").innerHTML+= "<li>"+data["tuesdayWork"][i]+"</li>";
-					}
-					
-				else
-					document.getElementById("work").innerHTML="Let's go for a run!";
-			}
-			function wednesday ()
-			{
-				if (temperature<10)
-					for (var i=0; i<data["wednesdayWork"].length;i++)
-					{
-						document.getElementById("work").innerHTML+= "<li>"+data["wednesdayWork"][i]+"</li>";
-					}
-					
-				else
-					document.getElementById("work").innerHTML="Let's go for a run!";
-			}
-			function thursday ()
-			{
-				if (temperature<10)
-					for (var i=0; i<data["thursdayWork"].length;i++)
-					{
-						document.getElementById("work").innerHTML+= "<li>"+data["thursdayWork"][i]+"</li>";
-					}
-					
-				else
-					document.getElementById("work").innerHTML="Let's go for a run!";
-			}
-			function friday ()
-			{
-				if (temperature<10)
-					for (var i=0; i<data["fridayWork"].length;i++)
-					{
-						document.getElementById("work").innerHTML+= "<li>"+data["fridayWork"][i]+"</li>";
-					}
-					
-				else
-					document.getElementById("work").innerHTML="Let's go for a run!";
-			}
-			function saturday ()
-			{
-				if (temperature<10)
-					for (var i=0; i<data["saturdayWork"].length;i++)
-					{
-						document.getElementById("work").innerHTML+= "<li>"+data["saturdayWork"][i]+"</li>";
-					}
-					
-				else
-					document.getElementById("work").innerHTML="Let's go for a run!";
-			}
-			function sunday ()
-			{
-				if (temperature<10)
-					for (var i=0; i<data["sundayWork"].length;i++)
-					{
-						document.getElementById("work").innerHTML+= "<li>"+data["sundayWork"][i]+"</li>";
-					}
-					
-				else
-					document.getElementById("work").innerHTML="Let's go for a run!";
-			}
-		});
-
+						var exercise=data.val()[keys[0]]["workout"];
+						for (var i=0; i<data.val()[keys[0]]["workout"].length;i++)
+						{
+							document.getElementById("work").innerHTML+= "<li>"+data.val()[keys[0]]["workout"][i]+"</li>";
+						}
+					}	
+					else
+						document.getElementById("work").innerHTML="Let's go for a run!";
+				}
+				console.log(data.val()[keys[0]]["goal"]);
+				$('#words').append(data.val()[keys[0]]["goal"]);  
+		};
 		function displayToday()
 		{
 			document.getElementById("dayWeek").innerHTML="Today is: "+dayName[dateToday.getDay()];
 		}
-		
 	}
 ); 
 
+//1. makes new elements
+// var ref = database.ref('Tuesday');
+//  var newWorkout ={
+//    workout:["Cable Crunches", "Spartan Thrusts", "Battle Ropes"],
+//    goal:"To complete 30 high knees in 15 seconds"
+//  }
+//  ref.push(newWorkout);
+
+// 2. adds new elements to the firebase portal when button clicked
+// $(document).ready(function(){
+//   $("#goalButton").click(function(){
+//         console.log("HELLO");
+//         var ref = database.ref('Just added!');
+//         var Monday ={
+//         workout:["Jumping Jacks", "High knees", "Should press"],
+//         goal:"To complete 30 high knees in 15 seconds"
+//       }
+//     ref.push(Monday);
+//   }); 
+// }); 
+
+// for when successfully completed the goal
