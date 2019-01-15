@@ -1,3 +1,60 @@
+
+var config = {
+    apiKey: "AIzaSyB4buf1HovVJWmzvKIcDvMnh5dfrifDc-k",
+    authDomain: "workout-1212e.firebaseapp.com",
+    databaseURL: "https://workout-1212e.firebaseio.com",
+    projectId: "workout-1212e",
+    storageBucket: "workout-1212e.appspot.com",
+    messagingSenderId: "466304417497"
+  };
+  firebase.initializeApp(config);
+  database = firebase.database();
+  //1. makes new elements
+  var ref = database.ref('Saturday');
+  var newWorkout ={
+    workout:["Jumping Jacks", "High knees", "Should press"],
+    goal:"To complete 30 high knees in 15 seconds"
+  }
+  // ref.push(newWorkout);
+
+
+
+
+
+  // 2. adds new elements to the firebase portal when button clicked
+$(document).ready(function(){
+  $("#goalButton").click(function(){
+        console.log("HELLO");
+        var ref = database.ref('Just added!');
+        var Monday ={
+        workout:["Jumping Jacks", "High knees", "Should press"],
+        goal:"To complete 30 high knees in 15 seconds"
+      }
+    ref.push(Monday);
+  }); 
+}); 
+
+ //pulling ALL data from Firebase
+ref.on('value', gotData, err);
+function gotData(data) {
+console.log(data.val());
+var dataVal = data.val();
+var keys = Object.keys(dataVal);
+
+//testing conditional statements with the data read from the firebase datastorage.
+var exercise=data.val()[keys[0]]["workout"];
+for (var i=0; i<data.val()[keys[0]]["workout"].length;i++)
+{
+	document.getElementById("work").innerHTML+= "<li>"+data.val()[keys[0]]["workout"][i]+"</li>";
+}
+
+console.log(data.val()[keys[0]]["goal"]);
+$('#words').append(data.val()[keys[0]]["goal"]);
+  }
+  function err(err){
+    console.log("error!"+err);
+  }
+
 function completed()
 {
  $("#goalStatus").append("Goal has been achieved");
