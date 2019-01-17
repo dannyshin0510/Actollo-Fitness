@@ -10,10 +10,8 @@ var config = {
   firebase.initializeApp(config);
   database = firebase.database();
 
-function completed() 
-{
- $("#goalStatus").append("Goal has been achieved");
-}
+$(document).ready(function(){
+
 
 $.getJSON("https://api.openweathermap.org/data/2.5/weather?q=Toronto,ca&units=metric&APPID=80b49077f2e7b925d8b3f69b5594b9bd", function(data)
 	{
@@ -44,6 +42,11 @@ $.getJSON("https://api.openweathermap.org/data/2.5/weather?q=Toronto,ca&units=me
 		{
 			console.log("error!"+err);
 		}
+
+
+
+
+
 		//data pulled from the current day set above^
 		function gotData(data)
 		{
@@ -65,16 +68,18 @@ $.getJSON("https://api.openweathermap.org/data/2.5/weather?q=Toronto,ca&units=me
 					else
 						document.getElementById("work").innerHTML="Let's go for a run!";
 				}
-				console.log(data.val()[keys[0]]["goal"]);
+				console.log(data.val());
 				$('#words').append(data.val()[keys[0]]["goal"]);  
 		};
 		function displayToday()
 		{
+
 			document.getElementById("dayWeek").innerHTML="Today is: "+dayName[dateToday.getDay()];
 		}
 	}
 ); 
 
+});
 //1. makes new elements
 // var ref = database.ref('Tuesday');
 //  var newWorkout ={
