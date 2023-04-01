@@ -1,1 +1,1 @@
-# Smart-Finess-Coach
+# Smart-Fitness-Coach
